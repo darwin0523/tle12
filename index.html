@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>TLE 6 Week 5 · More Games</title>
+<style>
+:root{--bg:#fff0d9;--card:#fff;--ink:#2e1a0d;--acc:#ff6a00;--c2:#ffb800;--g1:#ff6a00;--g2:#ff2d6f;--ok:#1fb86a;--bad:#e5384b;--soft:#ffe0b0;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+body[data-s=i]{--bg:#e4f1ff;--acc:#1a73ff;--c2:#00c2a8;--g1:#1a73ff;--g2:#00c2a8;--soft:#cfe5ff}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--card:#2a2236;--ink:#fff3e6}body{--bg:#1a1424!important;--soft:#3b2f52!important}}
+*{box-sizing:border-box}
+body{margin:0;background:radial-gradient(circle at 15% 0,var(--soft),transparent 55%),var(--bg);color:var(--ink);font-family:system-ui,sans-serif;padding:12px;text-align:center;min-height:100vh}
+.wrap{max-width:520px;margin:0 auto}
+h1{font-size:1.6rem;margin:4px 0;background:linear-gradient(90deg,var(--g1),var(--g2));-webkit-background-clip:text;background-clip:text;color:transparent}h2{font-size:1rem;margin:12px 0 4px}
+.sub{opacity:.8;font-size:.85rem}.hide{display:none!important}
+.card{background:var(--card);border-radius:18px;padding:12px;box-shadow:0 3px 10px #0003;margin:8px 0}
+button{font:inherit;cursor:pointer;border:0;border-radius:14px;color:inherit}
+.b{background:var(--acc);color:#fff;padding:12px 20px;font-weight:800;margin:4px}.b.alt{background:var(--soft);color:var(--ink)}.b.big{font-size:1.2rem;padding:15px 30px}
+.chip{background:var(--soft);padding:9px 14px;margin:3px;font-weight:700;border:2px solid transparent}.chip.on{border-color:var(--acc);background:var(--acc);color:#fff}
+input,select,textarea{font:inherit;color:inherit;background:var(--soft);border:0;border-radius:10px;padding:8px}
+textarea{width:100%;height:110px;font-size:.76rem;text-align:left}
+.pl{display:inline-flex;gap:4px;align-items:center;margin:3px}.pl input{width:125px}
+.mid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:10px 0}
+.game{border-radius:20px;padding:16px 6px;color:#fff;font-weight:900;box-shadow:0 5px 0 #0003}
+.game small{display:block;font-weight:500;opacity:.92;font-size:.72rem}
+.game .e{font-size:3.2rem;display:block;animation:bob 1.6s infinite alternate}@keyframes bob{to{transform:translateY(-6px) rotate(6deg) scale(1.08)}}
+.hud{display:flex;justify-content:space-between;font-weight:800;align-items:center;gap:6px}
+.bar{height:10px;background:var(--soft);border-radius:6px;overflow:hidden;margin:5px 0}.bar i{display:block;height:100%;background:linear-gradient(90deg,var(--g1),var(--g2));width:100%;transition:width 1s linear}
+.pic{font-size:3.2rem;line-height:1.1}.q{font-size:1.05rem;font-weight:800;margin:6px 0}
+.tk{background:var(--card);border:3px dashed var(--acc);border-radius:16px;padding:10px;margin:8px 0}
+.tk .q{font-size:1.2rem}.pt{height:8px;background:var(--soft);border-radius:6px;overflow:hidden}.pt i{display:block;height:100%;width:100%;background:var(--ok)}
+.og{display:grid;grid-template-columns:1fr 1fr;gap:8px}.og button{background:linear-gradient(135deg,var(--g1),var(--g2));color:#fff;padding:16px 6px;font-weight:900;font-size:.95rem;box-shadow:0 4px 0 #0003}.og button:active{transform:translateY(3px)}
+.gr{display:grid;grid-template-columns:repeat(10,1fr);gap:2px;margin:8px 0;touch-action:manipulation}
+.gc{aspect-ratio:1;background:var(--card);font-weight:900;font-size:.95rem;display:flex;align-items:center;justify-content:center;border-radius:6px;cursor:pointer}
+.gc.s{background:var(--c2);color:#2e1a0d}.gc.f0{background:#ff8fb8}.gc.f1{background:#8fe3ff}.gc.f2{background:#b9f08f}.gc.f3{background:#ffd37a}.gc.f4{background:#d3b3ff}.gc.f5{background:#ffb08f}
+.wl{display:flex;flex-wrap:wrap;gap:5px;justify-content:center}.wl span{background:var(--soft);padding:3px 9px;border-radius:10px;font-size:.78rem;font-weight:800}.wl span.f{text-decoration:line-through;background:var(--ok);color:#fff}
+#wheel{width:250px;height:250px;transition:transform 3.4s cubic-bezier(.15,.7,.1,1)}.ptr{font-size:2rem;margin-bottom:-14px;position:relative;z-index:2}
+.opts{display:grid;grid-template-columns:1fr;gap:8px;margin-top:8px}.opt{background:var(--soft);padding:12px 8px;font-weight:800}.opt.x{opacity:.35}
+.step{display:block;width:100%;background:var(--soft);padding:11px 10px;font-weight:700;margin:6px 0;text-align:left;font-size:.88rem}.step.dn{background:var(--ok);color:#fff}
+.board{display:grid;grid-template-columns:repeat(6,1fr);grid-template-rows:repeat(5,1fr);gap:4px;background:var(--acc);padding:6px;border-radius:16px;margin:8px 0}
+.tile{aspect-ratio:1;border-radius:10px;background:var(--card);color:#2e1a0d;position:relative;display:flex;align-items:center;justify-content:center;font-size:1.3rem}
+.tile small{position:absolute;top:1px;left:4px;font-size:.55rem;opacity:.6}.tile.s{background:#fff3b0}.tile.t{background:#ffd0d0}.tile.f{background:#ffd166}.tile.cur{outline:3px solid #fff}
+.tkn{position:absolute;bottom:-2px;right:0;font-size:.95rem;line-height:1;display:flex;flex-wrap:wrap;justify-content:flex-end;max-width:100%}
+.dice{width:54px;height:54px;border-radius:12px;background:var(--card);display:flex;align-items:center;justify-content:center;font-size:1.8rem;font-weight:900;box-shadow:0 2px 6px #0003}
+#modal{position:fixed;inset:0;background:#000a;display:flex;align-items:center;justify-content:center;padding:12px;z-index:5}
+#mc{background:var(--card);border-radius:20px;padding:16px;width:100%;max-width:440px;max-height:92vh;overflow:auto}
+.tf2{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}.tf2 button{padding:16px;font-weight:900;font-size:1.1rem;background:var(--soft)}
+.ok2{background:var(--ok)!important;color:#fff}.no{background:var(--bad)!important;color:#fff}
+.shake{animation:sh .4s}@keyframes sh{25%{transform:translateX(-8px)}75%{transform:translateX(8px)}}
+.row{display:flex;justify-content:space-between;gap:8px;padding:8px 12px;border-radius:10px;background:var(--soft);margin:5px 0;font-weight:700;text-align:left}.row.w{background:var(--acc);color:#fff}
+.fall{position:fixed;top:-30px;font-size:1.8rem;animation:fl 2.4s linear forwards;pointer-events:none;z-index:9}@keyframes fl{to{transform:translateY(110vh) rotate(360deg)}}
+</style></head><body data-s="f"><div class="wrap">
+
+<div id="home">
+ <div style="font-size:2.2rem">🧾🎡🔎🎲</div>
+ <h1>TLE 6 · Week 5 · More Games</h1>
+ <div class="sub">Grade 6 · Measuring Techniques &amp; Safety · Word Formatting</div>
+ <div class="card"><h2>Choose your lesson</h2><div id="subs"></div>
+  <h2>Players / Teams</h2><select id="pn"><option value="1">1 (Solo)</option><option>2</option><option>3</option><option selected>4</option></select><div id="pnames"></div>
+  <h2>Time per turn</h2><select id="time"><option value="60">1 minute</option><option value="90">1 minute 30 seconds</option><option value="120">2 minutes</option></select>
+  <div class="sub" style="margin-top:6px">In the Board Game, the time sets how long each challenge lasts.</div></div>
+ <div class="mid">
+  <button class="game" data-g="rush" style="background:linear-gradient(135deg,#ff8a00,#ff2d55)"><span class="e">🧾</span>Order Rush<small>Serve orders before they leave!</small></button>
+  <button class="game" data-g="wheel" style="background:linear-gradient(135deg,#7a3cff,#ff2d95)"><span class="e">🎡</span>Wheel of Challenges<small>Spin and conquer</small></button>
+  <button class="game" data-g="hunt" style="background:linear-gradient(135deg,#1fb86a,#0a8f8f)"><span class="e">🔎</span>Word Hunt<small>Find the hidden words</small></button>
+  <button class="game" data-g="board" style="background:linear-gradient(135deg,#00b8d9,#1f6bff)"><span class="e">🎲</span>Adventure Board<small>Roll, race, solve!</small></button>
+ </div>
+ <button class="b alt" id="edit">✏️ Edit questions &amp; puzzles</button>
+</div>
+
+<div id="editor" class="hide">
+ <h1>✏️ Edit Games</h1><div class="sub" id="esub"></div>
+ <div class="card">
+ <h2>Step order: Title | step 1 ; step 2 ; step 3 (correct order)</h2><textarea id="t0"></textarea>
+ <h2>True or False: Statement | True or False</h2><textarea id="t1"></textarea>
+ <h2>Quiz: Topic | Emoji | Question | Correct | Wrong | (Wrong)</h2><textarea id="t2"></textarea>
+ <h2>Order Rush: Emoji + order | Emoji + correct tool or feature</h2><textarea id="t3"></textarea>
+ <h2>Word Hunt words (one per line, max 10 letters)</h2><textarea id="t4" style="height:90px"></textarea></div>
+ <button class="b" id="save">💾 Save</button><button class="b alt" id="reset">Reset</button><button class="b alt" id="back">← Back</button><div class="sub" id="emsg"></div>
+</div>
+
+<div id="stage" class="hide"></div>
+<div id="end" class="hide"><h1 id="et"></h1><div class="card" id="eb"></div><button class="b" id="again">↺ Play again</button></div>
+</div>
+<div id="modal" class="hide"><div id="mc"></div></div>
+<script>
+const SUBJ=[{k:'f',ic:'🍳',n:'FCS · Measuring',d:[`Flour|Sift the flour to remove lumps;Scoop to fill the cup to overflow. Do not shake;Level off with a spatula
+White sugar|Sifting is not needed unless lumpy;Fill the cup until overflowing. Do not tap it down;Level off with the spatula
+Brown sugar|Check if the sugar is lumpy. Roll out the lumps;Scoop into the cup and pack compactly
+Powdered food|Remove lumps by stirring;Dip the measuring spoon into the powder;Level with a spatula or back edge of a knife
+Solid fats|Fill the cup or spoon while pressing until full;Level with a straight edge of a knife or spatula
+Liquids|Place the measuring cup on a flat, level surface;Pour the liquid up to the measuring mark;Do not lift the cup. View it at eye level
+Safe measuring|Identify the ingredient;Select the appropriate measuring tool;Prepare the tool and ingredient;Measure the ingredient carefully;Check the measurement;Clean the work area and return the tools`,`Dry ingredients include flour, sugar and baking powder.|True
+Milk, water and oil are liquid ingredients.|True
+Liquids should be estimated by just looking.|False
+When measuring flour, shake the cup to settle it.|False
+Level off dry ingredients with a spatula.|True
+Liquids are read at eye level.|True
+You should lift the cup while reading a liquid measure.|False
+Brown sugar is packed compactly into the cup.|True
+White sugar needs sifting only if it is lumpy.|True
+Measuring tools are returned properly after use.|True
+It is safe to measure without checking the markings.|False
+The work area should be kept clean and dry.|True`,`Measuring|🌾|Which tool is best for measuring flour?|Dry measuring cup|Liquid measuring cup|Fork
+Measuring|🥛|Milk is measured with a...|Liquid measuring cup|Dry measuring cup|Chopping board
+Measuring|🧂|Baking powder is measured with a...|Measuring spoon|Whisk|Peeler
+Measuring|🟤|Brown sugar is scooped and...|Packed compactly|Shaken|Poured
+Measuring|🧈|Shortening is pressed into the cup until...|Full|Half|Spilling
+Measuring|🥣|Why is accurate measuring important?|It affects texture and taste|It makes tools shiny|It is not important
+Safety|🧼|After measuring, you should...|Clean the area and return tools|Leave tools on the table|Hide the tools
+Safety|🛢️|You spill oil on the table. You should...|Wipe it up right away|Ignore it|Walk over it
+Safety|👀|Check the measuring markings...|Every time|Never|Only sometimes
+Steps|🔢|What is the first step in safe measuring?|Identify the ingredient|Clean the area|Pour the liquid
+Steps|🔍|After measuring carefully, you...|Check the measurement|Throw it away|Skip ahead
+Dry or Liquid|🥞|Flour is...|Dry|Liquid
+Dry or Liquid|🫒|Cooking oil is...|Liquid|Dry`,`🌾 Measure 1 cup of flour|🥣 Dry measuring cup
+🥛 Measure 1 cup of milk|🥛 Liquid measuring cup
+🧂 Measure 1 teaspoon of baking powder|🥄 Measuring spoon
+🧈 Level off the shortening|🍳 Spatula
+🫒 Measure ½ cup of cooking oil|🥛 Liquid measuring cup
+🍚 Level off the white sugar|🍳 Spatula
+💧 Measure 1 cup of water|🥛 Liquid measuring cup
+🟤 Measure packed brown sugar|🥣 Dry measuring cup
+🥄 Measure 1 teaspoon of baking soda|🥄 Measuring spoon
+🧃 Measure 1 cup of fruit juice|🥛 Liquid measuring cup`,`FLOUR
+SUGAR
+LIQUID
+SPOON
+LEVEL
+SIFT
+CHECK
+CLEAN
+SAFE
+MEASURE
+SPATULA
+POWDER`]},{k:'i',ic:'💻',n:'ICT · Word Formatting',d:[`Portfolio setup|Open Microsoft Word;Create a new document;Type the title MY LEARNING PORTFOLIO;Apply watermark, page color and border;Add header, footer and page number;Save the document
+Watermark|Click the Design tab;Select Watermark;Choose SAMPLE or DRAFT
+Header and footer|Click the Insert tab;Choose Header and type your name;Choose Footer and type grade and section
+Page number|Click the Insert tab;Select Page Number;Choose the location;Choose a style
+Saving|Click File;Choose Save As;Type the file name;Click Save`,`A watermark is faint text or an image behind the main content.|True
+A page border is placed around the edges of a page.|True
+The header is located at the bottom of the page.|False
+A footer can contain the learner's grade and section.|True
+Page numbers show the order of pages.|True
+Page color changes the background color of the page.|True
+A watermark may show words like DRAFT or SAMPLE.|True
+The footer is at the top of the page.|False
+A header can hold a name, title or subject.|True
+A watermark must hide the main text.|False
+A well-formatted document is clear, organized and readable.|True
+Formatting features should never be combined.|False`,`Features|🏷️|The My Learning Portfolio watermark word is...|SAMPLE|DRAFT|HELLO
+Features|📝|The Technology in Learning document watermark is...|DRAFT|SAMPLE|SCHOOL
+Features|👤|In the portfolio, the header shows your...|Name|Grade and section|Watermark
+Features|🎓|In the portfolio, the footer shows your...|Grade and section|Name|Page color
+Features|🔢|Which feature shows the order of pages?|Page Number|Watermark|Header
+Features|🖼️|Lines or designs around the page edges are...|Page Borders|Page Color|Footer
+Features|🎨|Which feature changes the page background?|Page Color|Watermark|Header
+Saving|💾|The portfolio is saved as...|My_Learning_Portfolio_Name.docx|portfolio.mp3|Name.png
+Saving|📄|The footer of the Technology activity is...|Grade 6 – ICT Activity|Your name|DRAFT
+Saving|✨|A well-formatted document should be...|Clear, organized and readable|Crowded and messy|Empty`,`💬 Add the word SAMPLE behind the text|💧 Watermark
+🌈 Change the background of the page|🎨 Page Color
+🖼️ Put a frame around the page edges|🖼️ Page Borders
+📖 Show page 1, 2, 3 on each page|🔢 Page Number
+👤 Type your name at the top of every page|⬆️ Header
+🎓 Type grade and section at the bottom|⬇️ Footer
+✍️ Mark the document as DRAFT|💧 Watermark
+💙 Make the page light blue|🎨 Page Color
+📘 Add Grade 6 – ICT Activity at the bottom|⬇️ Footer
+✨ Add a design line around the page|🖼️ Page Borders`,`WATERMARK
+HEADER
+FOOTER
+BORDER
+COLOR
+NUMBER
+DESIGN
+INSERT
+SAMPLE
+DRAFT
+DOCUMENT
+FORMAT`]}];
+const $=id=>document.getElementById(id),R=a=>a[Math.random()*a.length|0],S=a=>[...a].sort(()=>Math.random()-.5);
+const AV=["🦊","🐯","🐼","🦄"],fmt=s=>s==60?"1 minute":s==90?"1 minute 30 seconds":"2 minutes";
+let si=0,SQ=[],TF=[],QZ=[],OD=[],WD=[],P=[],T=60,SI=0,G="",ct=null,pt=null,raf=null,cur=0,busy=false,mult=1;
+function rd(k,d){try{return localStorage.getItem(k)||d}catch(e){return d}}
+function ld(){const s=SUBJ[si];document.body.dataset.s=s.k;s.d.forEach((d,n)=>$("t"+n).value=rd("w5b"+s.k+n,d));parse();$("esub").textContent=s.ic+" "+s.n}
+const L=(id,m)=>$(id).value.split("\n").map(l=>l.split("|").map(x=>x.trim())).filter(p=>p.length>=m&&p[0]);
+function parse(){SQ=L("t0",2).map(p=>({t:p[0],s:p[1].split(";").map(x=>x.trim()).filter(Boolean)})).filter(x=>x.s.length>=2);
+ TF=L("t1",2).map(p=>({s:p[0],a:/^t/i.test(p[1])}));QZ=L("t2",5).map(p=>({c:p[0],p:p[1],q:p[2],a:p[3],w:p.slice(4).filter(Boolean)}));
+ OD=L("t3",2).map(p=>({q:p[0],a:p[1]}));WD=$("t4").value.split("\n").map(x=>x.trim().toUpperCase().replace(/[^A-Z]/g,"")).filter(x=>x.length>=3&&x.length<=10)}
+function show(id){["home","editor","stage","end"].forEach(x=>$(x).classList.toggle("hide",x!==id))}
+function stop(){clearInterval(ct);clearInterval(pt);cancelAnimationFrame(raf);raf=null}
+function subs(){$("subs").innerHTML=SUBJ.map((s,i)=>`<button class="chip ${i==si?"on":""}" data-i="${i}">${s.ic} ${s.n}</button>`).join("");
+ $("subs").querySelectorAll(".chip").forEach(e=>e.onclick=()=>{si=+e.dataset.i;subs();ld()})}
+function pn(){const n=+$("pn").value;$("pnames").innerHTML=Array.from({length:n},(_,i)=>`<span class="pl">${AV[i]}<input value="${n==1?"Player":"Team "+(i+1)}" maxlength="14"></span>`).join("")}
+$("pn").onchange=pn;$("edit").onclick=()=>{ld();show("editor")};$("back").onclick=()=>{ld();show("home")};
+$("save").onclick=()=>{parse();try{SUBJ[si].d.forEach((d,n)=>localStorage.setItem("w5b"+SUBJ[si].k+n,$("t"+n).value))}catch(e){}$("emsg").textContent="✅ Saved!"};
+$("reset").onclick=()=>{try{[0,1,2,3,4].forEach(n=>localStorage.removeItem("w5b"+SUBJ[si].k+n))}catch(e){}ld();$("emsg").textContent="Reset to default."};
+$("again").onclick=()=>show("home");
+function party(){for(let k=0;k<26;k++){const e=document.createElement("div");e.className="fall";e.textContent=["🎉","⭐","🏆","🥣","💻"][k%5];e.style.left=Math.random()*95+"vw";e.style.animationDelay=Math.random()*.9+"s";document.body.appendChild(e);setTimeout(()=>e.remove(),3400)}}
+document.querySelectorAll(".game").forEach(b=>b.onclick=()=>{parse();const g=b.dataset.g,nA=new Set(OD.map(x=>x.a)).size;
+ if((g=="rush"&&(OD.length<3||nA<3))||(g=="hunt"&&WD.length<3)||((g=="wheel"||g=="board")&&(QZ.length<3||SQ.length<1||TF.length<3))){alert("Not enough items. Open ✏️ Edit and add more.");return}
+ G=g;T=+$("time").value;mult=T/60;P=[...$("pnames").querySelectorAll("input")].map((e,i)=>({n:e.value||"Team "+(i+1),av:AV[i],sc:0,note:"",pos:0,st:0}));SI=0;cur=0;busy=false;
+ g=="board"?board():ready()});
+const INFO={rush:"Orders arrive from hungry customers! Tap the right tool or feature BEFORE the patience bar runs out. 3 mistakes and you're out! Fast service = bonus points.",
+ wheel:"Spin the wheel and take on the challenge it lands on: quiz, true-or-false, step order or a free bonus!",
+ hunt:"Find the hidden words in the letter grid. Tap the FIRST letter, then tap the LAST letter of a word. Words go across, down or diagonal."};
+function ready(){const p=P[SI];$("stage").innerHTML=`<h1>${p.av} ${p.n}, get ready!</h1><div class="card"><div style="font-size:3rem">${{rush:"🧾",wheel:"🎡",hunt:"🔎"}[G]}</div><div>${INFO[G]}</div><div class="sub" style="margin-top:6px">Time: ${fmt(T)}</div></div><button class="b big" id="go">▶ Go!</button><br><button class="b alt" id="mn">← Menu</button>`;
+ show("stage");$("go").onclick=()=>({rush,wheel,hunt})[G]();$("mn").onclick=()=>{stop();show("home")}}
+function hud(p,x){$("stage").innerHTML=`<div class="hud"><span>${p.av} ${p.n}</span><span>⭐ <span id="sc">0</span></span><span>⏱ <span id="tc"></span></span></div><div class="bar"><i id="tb2"></i></div>${x}`}
+function runT(onEnd){let left=T;clearInterval(ct);const tk=()=>{$("tc").textContent=Math.floor(left/60)+":"+String(left%60).padStart(2,"0");$("tb2").style.width=(left/T*100)+"%";if(left<=0){stop();onEnd();return}left--};tk();ct=setInterval(tk,1000);return()=>left}
+function fin(score,note){stop();const p=P[SI];p.sc=score;p.note=note||"";if(++SI<P.length)ready();else results()}
+function results(){const r=[...P].sort((a,b)=>b.sc-a.sc),tie=r.length>1&&r[0].sc==r[1].sc;
+ $("et").textContent=P.length==1?"⏰ Time's up!":tie?"🤝 It's a tie!":"🏆 "+r[0].n+" wins!";
+ $("eb").innerHTML=r.map((p,i)=>`<div class="row ${i==0&&!tie?"w":""}"><span>${i+1}. ${p.av} ${p.n}<br><small>${p.note}</small></span><span>⭐ ${p.sc}</span></div>`).join("");show("end");party()}
+const bad=el=>{el.classList.remove("shake");void el.offsetWidth;el.classList.add("shake")};
+function orderUI(box,c,onDone,onWrong){let sel=0,base;do{base=S(c.s)}while(c.s.length>2&&base.join()==c.s.join());const done={};
+ const dr=()=>{box.innerHTML=base.map((x,i)=>`<button class="step ${i in done?"dn":""}">${done[i]?done[i]+". ":""}${x}</button>`).join("");
+  box.querySelectorAll(".step").forEach((b,i)=>b.onclick=()=>{if(i in done)return;if(base[i]===c.s[sel]){done[i]=++sel;dr();if(sel==c.s.length)onDone()}else{onWrong&&onWrong();bad(box);Object.keys(done).forEach(k=>delete done[k]);sel=0;setTimeout(dr,420)}})};dr()}
+function quizUI(box,b,onRes){box.innerHTML=`<div class="pic">${b.p}</div><div class="q">${b.q}</div><div class="opts">${S([b.a,...b.w]).map(o=>`<button class="opt">${o}</button>`).join("")}</div>`;
+ let lock=false;box.querySelectorAll(".opt").forEach(e=>e.onclick=()=>{if(lock)return;const ok=e.textContent==b.a;if(ok){lock=true;e.classList.add("ok2");onRes(true)}else{e.classList.add("no","x");onRes(false,true)}})}
+function tfUI(box,x,onRes){box.innerHTML=`<div class="pic">🧪</div><div class="q">${x.s}</div><div class="tf2"><button>✅ True</button><button>❌ False</button></div>`;let lock=false;
+ box.querySelectorAll("button").forEach((b,i)=>b.onclick=()=>{if(lock)return;lock=true;const ok=(i==0)==x.a;b.classList.add(ok?"ok2":"no");onRes(ok)})}
+// ---------- 🧾 Order Rush
+function rush(){const p=P[SI],btns=[...new Set(OD.map(x=>x.a))];let d=S(OD),hearts=3,sc=0,served=0,cur2,pat,PT=7000,t0=0;
+ hud(p,`<div class="hud"><span id="ht" style="font-size:1.4rem"></span><span class="sub">Served: <b id="sv">0</b></span></div><div class="tk"><div class="pic" id="cu"></div><div class="q" id="oq"></div><div class="pt"><i id="pi"></i></div></div><div class="og" id="og"></div>`);
+ $("og").innerHTML=btns.map(b=>`<button>${b}</button>`).join("");
+ const hh=()=>$("ht").textContent="❤️".repeat(hearts)+"🖤".repeat(3-hearts);
+ const nx=()=>{if(!d.length)d=S(OD);cur2=d.pop();$("cu").textContent=R(["😀","😋","🤩","😎","🥳"]);$("oq").textContent=cur2.q;t0=performance.now();hh()};
+ const lose=()=>{hearts--;hh();bad($("oq"));if(hearts<=0){stop();fin(sc,served+" orders served");return}nx()};
+ $("og").querySelectorAll("button").forEach(b=>b.onclick=()=>{if(b.textContent==cur2.a){const e=performance.now()-t0;sc+=e<3000?15:10;served++;$("sc").textContent=sc;$("sv").textContent=served;nx()}else lose()});
+ nx();clearInterval(pt);pt=setInterval(()=>{const e=performance.now()-t0,r=Math.max(0,1-e/PT);$("pi").style.width=(r*100)+"%";$("pi").style.background=r>.5?"var(--ok)":r>.25?"var(--c2)":"var(--bad)";if(e>=PT)lose()},100);
+ runT(()=>fin(sc,served+" orders served"))}
+// ---------- 🎡 Wheel
+function wheel(){const p=P[SI];let sc=0,n=0,rot=0,spinning=false;
+ const topics=[...new Set(QZ.map(q=>q.c))].slice(0,5),segs=[...topics.map(t=>({n:t,e:QZ.find(q=>q.c==t).p,ty:"quiz",t})),{n:"True or False",e:"🧪",ty:"tf"},{n:"Step Order",e:"🧩",ty:"seq"},{n:"Bonus",e:"🎁",ty:"bonus"}];
+ const N=segs.length,sg=360/N,cs=["#ff2d95","#ffb800","#3a86ff","#1fb86a","#9b5de5","#fb8500","#00bbf9","#e5384b"];let svg="";
+ for(let i=0;i<N;i++){const a0=(i*sg-90)*Math.PI/180,a1=((i+1)*sg-90)*Math.PI/180,m=(a0+a1)/2,f=x=>x.toFixed(1);
+  svg+=`<path d="M125 125 L${f(125+120*Math.cos(a0))} ${f(125+120*Math.sin(a0))} A120 120 0 0 1 ${f(125+120*Math.cos(a1))} ${f(125+120*Math.sin(a1))} Z" fill="${cs[i%8]}" stroke="#fff" stroke-width="3"/><text x="${f(125+78*Math.cos(m))}" y="${f(125+78*Math.sin(m)+10)}" font-size="28" text-anchor="middle">${segs[i].e}</text>`}
+ hud(p,`<div class="ptr">🔻</div><svg id="wheel" viewBox="0 0 250 250">${svg}<circle cx="125" cy="125" r="14" fill="#fff"/></svg><div><button class="b" id="sp">🎡 SPIN!</button></div><div id="wq"></div>`);
+ const after=(pts,msg)=>{sc+=pts;n++;$("sc").textContent=sc;$("wq").insertAdjacentHTML("beforeend",`<div class="q">${msg}</div>`);setTimeout(()=>{if($("wq")){$("wq").innerHTML="";spinning=false}},900)};
+ $("sp").onclick=()=>{if(spinning)return;spinning=true;$("wq").innerHTML="";rot+=1440+Math.random()*360;$("wheel").style.transform=`rotate(${rot}deg)`;
+  setTimeout(()=>{if(!$("wq"))return;const s=segs[Math.floor(((360-(rot%360))%360)/sg)];$("wq").innerHTML=`<div class="card"><div class="sub">${s.e} ${s.n}</div><div id="wb"></div></div>`;const bx=$("wb");
+   if(s.ty=="bonus"){bx.innerHTML=`<div class="pic">🎁</div><div class="q">Free bonus! +10</div>`;after(10,"🎉")}
+   else if(s.ty=="quiz")quizUI(bx,R(QZ.filter(q=>q.c==s.t)),(ok,w)=>{if(ok)after(15,"🎉 Correct!");else if(w){sc=Math.max(0,sc-3);$("sc").textContent=sc}});
+   else if(s.ty=="tf")tfUI(bx,R(TF),ok=>after(ok?10:0,ok?"🎉 Correct!":"Not quite!"));
+   else{const c=R(SQ);bx.innerHTML=`<div class="q">Order the steps: ${c.t}</div><div id="ob"></div>`;orderUI($("ob"),c,()=>after(20,"🎉 Sequenced!"))}},3500)};
+ runT(()=>fin(sc,n+" spins"))}
+// ---------- 🔎 Word Hunt
+function buildGrid(words){const N=10,g=Array.from({length:N},()=>Array(N).fill("")),pl=[],ds=[[1,0],[0,1],[1,1]];
+ for(const w of S(words)){let ok=false;for(let a=0;a<250&&!ok;a++){const [dx,dy]=R(ds),x=Math.random()*N|0,y=Math.random()*N|0,ex=x+dx*(w.length-1),ey=y+dy*(w.length-1);
+  if(ex>=N||ey>=N)continue;let fit=true;for(let i=0;i<w.length;i++){const c=g[y+dy*i][x+dx*i];if(c&&c!=w[i]){fit=false;break}}
+  if(fit){for(let i=0;i<w.length;i++)g[y+dy*i][x+dx*i]=w[i];pl.push(w);ok=true}}}
+ const A="ABCDEFGHIJKLMNOPQRSTUVWXYZ";for(let r=0;r<N;r++)for(let c=0;c<N;c++)if(!g[r][c])g[r][c]=R(A.split(""));return{g,pl}}
+function hunt(){const p=P[SI];let sc=0,boards=0,found=0;hud(p,`<div class="gr" id="gr"></div><div class="wl" id="wl"></div><div class="sub">Tap the first letter, then the last letter</div>`);
+ const N=10;let B,fd,first=null,mark={};
+ const nb=()=>{B=buildGrid(S(WD).slice(0,6));fd=new Set();first=null;mark={};dr()};
+ const dr=()=>{$("gr").innerHTML=B.g.map((row,r)=>row.map((c,k)=>`<div class="gc ${mark[r*N+k]!=null?"f"+mark[r*N+k]:first&&first[0]==r&&first[1]==k?"s":""}" data-r="${r}" data-c="${k}">${c}</div>`).join("")).join("");
+  $("wl").innerHTML=B.pl.map(w=>`<span class="${fd.has(w)?"f":""}">${w}</span>`).join("");
+  $("gr").querySelectorAll(".gc").forEach(e=>e.onclick=()=>{const r=+e.dataset.r,c=+e.dataset.c;
+   if(!first){first=[r,c];dr();return}
+   const dx=c-first[1],dy=r-first[0],len=Math.max(Math.abs(dx),Math.abs(dy));
+   if((dx==0||dy==0||Math.abs(dx)==Math.abs(dy))&&len>0){const sx=Math.sign(dx),sy=Math.sign(dy);let s="",cells=[];
+    for(let i=0;i<=len;i++){const rr=first[0]+sy*i,cc=first[1]+sx*i;s+=B.g[rr][cc];cells.push(rr*N+cc)}
+    const w=B.pl.find(x=>!fd.has(x)&&(x==s||x==[...s].reverse().join("")));
+    if(w){fd.add(w);found++;sc+=10;$("sc").textContent=sc;cells.forEach(k=>mark[k]=fd.size%6);first=null;dr();
+     if(fd.size==B.pl.length){boards++;sc+=20;$("sc").textContent=sc;setTimeout(()=>{if($("gr"))nb()},700)}return}}
+   first=null;dr()})};
+ nb();runT(()=>fin(sc,found+" words found"))}
+// ---------- 🎲 Adventure Board
+const END=29,TY={q:"❓",s:"🧩",t:"🧪",b:"⭐",x:"🌀"};
+const tileType=i=>i==0?"start":i==END?"fin":i%7==0?"b":i%11==0?"x":["q","s","t","q","s"][i%5];
+function board(){$("stage").innerHTML=`<div class="hud"><div class="dice" id="dice">🎲</div><b id="turn"></b><button class="b" id="roll">🎲 Roll!</button></div><div class="board" id="bd"></div><div class="sub" id="stars"></div><div class="sub" id="toast" style="min-height:1.4em"></div><button class="b alt" id="mn">← Menu</button>`;show("stage");
+ $("mn").onclick=()=>{stop();$("modal").classList.add("hide");show("home")};$("roll").onclick=roll;draw()}
+function draw(){let h="";for(let i=0;i<=END;i++){const r=i/6|0,c=r%2?5-i%6:i%6,t=tileType(i),ic=i==0?"🏕️":i==END?"🏆":TY[t],tk=P.filter(p=>p.pos==i).map(p=>p.av).join("");
+  h+=`<div class="tile ${t=="b"?"s":t=="x"?"t":t=="fin"?"f":""} ${P[cur].pos==i?"cur":""}" style="grid-column:${c+1};grid-row:${5-r}"><small>${i}</small>${ic}<span class="tkn">${tk}</span></div>`}
+ $("bd").innerHTML=h;$("turn").textContent=P[cur].av+" "+P[cur].n;$("stars").textContent=P.map(p=>p.av+" ⭐"+p.st).join("  ·  ")}
+const toast=t=>$("toast").textContent=t;
+function roll(){if(busy)return;busy=true;toast("");let n=0;const iv=setInterval(()=>{$("dice").textContent=1+(Math.random()*6|0);if(++n>9){clearInterval(iv);const d=1+(Math.random()*6|0);$("dice").textContent=d;move(P[cur],d,()=>land(P[cur]))}},70)}
+function move(p,s,cb){const dir=s<0?-1:1;let k=Math.abs(s);const iv=setInterval(()=>{if(k<=0||(dir>0&&p.pos>=END)||(dir<0&&p.pos<=0)){clearInterval(iv);cb();return}p.pos+=dir;k--;draw()},260)}
+function land(p){if(p.pos>=END)return win();const t=tileType(p.pos);
+ if(t=="b"){toast("⭐ Bonus! Move 2 forward!");move(p,2,after)}else if(t=="x"){toast("🌀 Whirlpool! Back 2!");move(p,-2,after)}else if(t=="start")after();
+ else challenge(t,ok=>{if(ok){p.st++;toast("✅ Great! +1 step & ⭐");move(p,1,after)}else{toast("❌ Oops! Back 2 steps");move(p,-2,after)}})}
+function after(){if(P[cur].pos>=END)return win();cur=(cur+1)%P.length;busy=false;draw()}
+function modal(h){$("mc").innerHTML=h;$("modal").classList.remove("hide")}
+function timer(sec,fail){clearInterval(ct);let l=sec;const b=$("tb");b.style.transition="none";b.style.width="100%";setTimeout(()=>{b.style.transition="width 1s linear"},30);ct=setInterval(()=>{l--;b.style.width=(l/sec*100)+"%";if(l<=0){clearInterval(ct);fail()}},1000)}
+function done(ok,msg,cb){clearInterval(ct);$("mc").insertAdjacentHTML("beforeend",`<div class="q">${ok?"🎉 ":"⏰ "}${msg}</div>`);setTimeout(()=>{$("modal").classList.add("hide");cb(ok)},1100)}
+function challenge(t,cb){let fin2=false;const fn=(ok,m)=>{if(fin2)return;fin2=true;done(ok,m,cb)};
+ modal(`<div class="bar"><i id="tb"></i></div><div id="cb"></div>`);
+ if(t=="q"){const b=R(QZ);quizUI($("cb"),b,(ok,w)=>{if(ok)fn(true,"Correct!");else if(w)fn(false,"Answer: "+b.a)});timer(20*mult,()=>fn(false,"Time's up! Answer: "+b.a))}
+ else if(t=="t"){const x=R(TF);tfUI($("cb"),x,ok=>fn(ok,ok?"Correct!":"The answer was "+(x.a?"True":"False")));timer(15*mult,()=>fn(false,"Time's up!"))}
+ else{const c=R(SQ);$("cb").innerHTML=`<div class="pic">🧩</div><div class="q">Order the steps: ${c.t}</div><div id="ob"></div>`;orderUI($("ob"),c,()=>fn(true,"Sequenced!"));timer(40*mult,()=>fn(false,"Time's up!"))}}
+function win(){stop();const r=[...P].sort((a,b)=>b.pos-a.pos||b.st-a.st);
+ $("et").textContent=P.length==1?"🏆 You reached the trophy!":"🏆 "+r[0].n+" wins the race!";
+ $("eb").innerHTML=r.map((p,i)=>`<div class="row ${i==0?"w":""}"><span>${i+1}. ${p.av} ${p.n}</span><span>⭐ ${p.st} · tile ${p.pos}</span></div>`).join("");show("end");party()}
+subs();pn();ld();
+</script></body></html>
